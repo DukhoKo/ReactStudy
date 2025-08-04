@@ -2,7 +2,7 @@ import { Layout, Menu } from "antd";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import { Link, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home.jsx";
-import About from "./pages/About.jsx";
+import About from "./pages/Me/About.jsx";
 import Work from "./pages/Work.jsx";
 
 function App() {
