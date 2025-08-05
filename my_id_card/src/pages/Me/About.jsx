@@ -5,18 +5,35 @@ import Tech from './Tech.jsx';
 
 const career = [
   {
-    label: '2018-09-02 ~ 2023-04-30',
-    children: 'PnpSoft',
+    period: '2018-09-02 ~ 2023-04-30',
+    company: 'PnpSoft',
+    tasks: ['애자일 업무 협업 플랫폿 개발','급식 재료 관리 및 메뉴 자동 추천 웹/앱 개발']
   },
   {
-    label: '2023-05-01 ~ 2024-08-31',
-    children: 'DataStreams',
+    period: '2023-05-01 ~ 2024-08-31',
+    company: 'DataStreams',
+    tasks: ['근로복지공단 산재보험료율 시뮬레이션 시스템 고도화 사업','국방부 AI 데이터 플랫폼 구축 사업','베트남 비대면 원격진료 플랫폼 구축']
   },
   {
-    label: '2024-09-02 ~',
-    children: 'Woongjin',
+    period: '2024-09-02 ~ ',
+    company: 'Woongjin',
+    tasks: ['BMW CCB 프로젝트','EU KIA']
   }
 ];
+
+const timelineItems = career.map((item) => ({
+  label: item.period,
+  children: (
+    <>
+      <strong>{item.company}</strong>
+      <ul style={{ margin: '4px 0', paddingLeft: '20px' }}>
+        {item.tasks.map((task, index) => (
+          <li key={index}>{task}</li>
+        ))}
+      </ul>
+    </>
+  ),
+}));
 
 function About() {
   const [value, setValue] = useState(() => dayjs('1992-12-28'));
@@ -56,7 +73,7 @@ function About() {
       children: (
         <Timeline
           mode="left"
-          items={career}
+          items={timelineItems}
           style={{ marginTop: '8px', marginBottom: '8px' }}
         />
       ),
