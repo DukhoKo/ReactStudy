@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col, Typography, Timeline, Divider, Descriptions, Badge, Alert, Calendar, Avatar } from "antd";
 import dayjs from 'dayjs';
 import Tech from './Tech.jsx';
+import MapSection from './MapSection.jsx'; // 경로는 상황에 맞게 수정
 
 const career = [
   {
@@ -17,7 +18,7 @@ const career = [
   {
     period: '2024-09-02 ~ ',
     company: 'Woongjin',
-    tasks: ['BMW CCB 프로젝트','EU KIA']
+    tasks: ['BMW CCB 프로젝트','EU KIA MyService']
   }
 ];
 
@@ -97,6 +98,18 @@ function About() {
       <Row style={{ marginBottom: 24 }}>
         <Col span={24}>
           <Descriptions title="Dukho Ko - Profile" bordered items={introduces} column={2} labelStyle={{ width: 120 }} contentStyle={{ whiteSpace: 'normal' }} />
+        </Col>
+      </Row>
+
+      <Divider plain>
+        <Typography.Title type="secondary" level={4}>
+          여행지
+        </Typography.Title>
+      </Divider>
+
+      <Row style={{ marginBottom: 24 }}>
+        <Col span={24}>
+          <MapSection />
         </Col>
       </Row>
     </>
