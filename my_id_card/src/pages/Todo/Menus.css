@@ -1,0 +1,5 @@
+/* 선택된 항목에 파란색 스타일 적용 */
+.ant-menu-item-selected {
+  background-color: #e6f4ff !important; /* 연한 파란색 */
+  color: #1677ff !important;            /* 텍스트 파란색 */
+}
