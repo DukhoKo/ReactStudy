@@ -4,34 +4,18 @@ import { Menu as AntdMenu} from 'antd';
 import './Menus.css';
 
 const items = [
-    {
-        key: 'list',
-        label: 'List',
-        icon: <UnorderedListOutlined />,
-    },
-    { type: 'divider'},
-    {
-        key: 'kanban',
-        label: 'Kanban',
-        icon: <AppstoreOutlined />,
-    },
-    { type: 'divider'},
-    {
-        key: 'calendar',
-        label: 'Calendar',
-        icon: <CalendarOutlined />
-    },
-    { type: 'divider'},
-    {
-        key: 'chart',
-        label: 'Chart',
-        icon: <LineChartOutlined />
-    },
+    {key: 'list', label: 'List', icon: <UnorderedListOutlined />,},
+    {type: 'divider'},
+    {key: 'kanban', label: 'Kanban', icon: <AppstoreOutlined />,},
+    {type: 'divider'},
+    {key: 'calendar', label: 'Calendar', icon: <CalendarOutlined />},
+    {type: 'divider'},
+    {key: 'chart', label: 'Chart', icon: <LineChartOutlined />},
 ];
 
-function Menus() {
+function Menus({ onMenuClick }) {
     const onClick = e => {
-        console.log('click ', e);
+        onMenuClick(e.key);
     };
     return (
         <AntdMenu
