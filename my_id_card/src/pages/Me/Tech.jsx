@@ -1,5 +1,6 @@
 import React from "react";
 import { Typography, Tag, Divider } from "antd";
+import {CodeOutlined, Html5Outlined, DatabaseOutlined} from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 
@@ -7,7 +8,7 @@ const techStack = {
   Frontend: [
     { name: "Vue.js", color: "cyan" },
     { name: "React.js", color: "blue" },
-    { name: "HTML", color: "magenta" },
+    { name: "HTML", color: "magenta", icon: <Html5Outlined /> },
     { name: "JavaScript", color: "green" },
   ],
   Backend: [
@@ -16,7 +17,7 @@ const techStack = {
     { name: "QueryDsl", color: "lime" },
   ],
   Database: [
-    { name: "MySQL", color: "gold" },
+    { name: "MySQL", color: "gold", icon: <DatabaseOutlined /> },
     { name: "Oracle", color: "volcano" },
     { name: "PostgreSQL", color: "lime" },
   ],
