@@ -1,101 +1,93 @@
-import React, { useState } from "react";
-import { Row, Col, Card, Typography, Tag, Button, Input, Select, Space } from "antd";
+import React, { useEffect, useState } from "react";
+import { Row, Col, Card, Typography, Button, Input, Select, Space, message } from "antd";
 
 const { Title } = Typography;
 
-const TAG_COLOR = {
-  High: "red",
-  Medium: "gold",
-  Low: "blue",
-};
-
-const initialData = {
-  todo: [
-    { id: "1", title: "기획서 작성", tag: "High" },
-    { id: "2", title: "UI 디자인", tag: "Medium" },
-  ],
-  doing: [
-    { id: "3", title: "API 설계", tag: "Low" },
-  ],
-  done: [],
-};
-
 function KanbanView() {
-  const [tasks, setTasks] = useState(initialData);
+  const [tasks, setTasks] = useState({ inProgress: [], done: [] });
+  const [loading, setLoading] = useState(false);
+
+  // 새 카드 추가용(간단)
   const [newTitle, setNewTitle] = useState("");
-  const [newTag, setNewTag] = useState("Medium");
-  const [newColumn, setNewColumn] = useState("todo");
+  const [newStatus, setNewStatus] = useState("inProgress"); // inProgress | done
+
+  useEffect(() => {
+    setLoading(true);
+    fetch("https://jsonplaceholder.typicode.com/todos?_limit=20")
+      .then((res) => res.json())
+      .then((todos) => {
+        console.log("Kanban 원본 todos:", todos); 
+
+        const mapped = todos.map((t) => ({
+          id: String(t.id),
+          title: t.title,
+          completed: t.completed,
+        }));
+
+        setTasks({
+          inProgress: mapped.filter((t) => !t.completed),
+          done: mapped.filter((t) => t.completed),
+        });
+      })
+      .catch(() => message.error("데이터를 불러오는 중 오류가 발생했어요."))
+      .finally(() => setLoading(false));
+  }, []);
 
   const addTask = () => {
     if (!newTitle.trim()) return;
-    const newTask = {
-      id: Date.now().toString(),
-      title: newTitle,
-      tag: newTag,
-    };
-    setTasks(prev => ({
-      ...prev,
-      [newColumn]: [...prev[newColumn], newTask]
+    const item = { id: Date.now().toString(), title: newTitle, completed: newStatus === "done" };
+    setTasks((prev) => ({
+      inProgress: newStatus === "inProgress" ? [...prev.inProgress, item] : prev.inProgress,
+      done: newStatus === "done" ? [...prev.done, item] : prev.done,
     }));
     setNewTitle("");
   };
 
-  const removeTask = (colKey, taskId) => {
-    setTasks(prev => ({
+  const removeTask = (colKey, id) => {
+    setTasks((prev) => ({
       ...prev,
-      [colKey]: prev[colKey].filter(t => t.id !== taskId)
+      [colKey]: prev[colKey].filter((t) => t.id !== id),
     }));
   };
 
   return (
-    <div style={{ padding: "8px" }}>
-      {/* 카드 추가 입력창 */}
+    <div style={{ padding: 8 }}>
+      {/* 카드 추가 (아주 단순 버전) */}
       <Card style={{ marginBottom: 16 }}>
         <Space wrap>
           <Input
             placeholder="작업 제목"
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
-            style={{ width: 200 }}
+            style={{ width: 240 }}
           />
           <Select
-            value={newTag}
-            onChange={setNewTag}
-            style={{ width: 120 }}
+            value={newStatus}
+            onChange={setNewStatus}
+            style={{ width: 140 }}
             options={[
-              { value: "High", label: "High" },
-              { value: "Medium", label: "Medium" },
-              { value: "Low", label: "Low" },
-            ]}
-          />
-          <Select
-            value={newColumn}
-            onChange={setNewColumn}
-            style={{ width: 150 }}
-            options={[
-              { value: "todo", label: "To Do" },
-              { value: "doing", label: "In Progress" },
-              { value: "done", label: "Done" },
+              { value: "inProgress", label: "진행중" },
+              { value: "done", label: "완료" },
             ]}
           />
           <Button type="primary" onClick={addTask}>추가</Button>
         </Space>
       </Card>
 
-      {/* 칸반 컬럼 */}
+      {/* 진행중 / 완료 두 컬럼 */}
       <Row gutter={16}>
         {[
-          { key: "todo", title: "To Do" },
-          { key: "doing", title: "In Progress" },
-          { key: "done", title: "Done" }
-        ].map(col => (
-          <Col span={8} key={col.key}>
+          { key: "inProgress", title: "진행중" },
+          { key: "done", title: "완료" },
+        ].map((col) => (
+          <Col span={12} key={col.key}>
             <Card
-              title={<Title level={4}>{col.title}</Title>}
+              title={<Title level={4} style={{ margin: 0 }}>{col.title}</Title>}
               bordered
-              style={{ minHeight: "300px" }}
+              loading={loading}
+              style={{ minHeight: 320 }}
             >
-              {tasks[col.key].map(task => (
+              {tasks[col.key].map((task) => (
                 <Card
                   key={task.id}
                   size="small"
@@ -106,10 +98,10 @@ function KanbanView() {
                     </Button>
                   }
                 >
-                  {task.title} <Tag color={TAG_COLOR[task.tag]}>{task.tag}</Tag>
+                  {task.title}
                 </Card>
               ))}
-              {tasks[col.key].length === 0 && (
+              {tasks[col.key].length === 0 && !loading && (
                 <div style={{ color: "#999", textAlign: "center", padding: "16px 0" }}>
                   작업 없음
                 </div>
